@@ -1,5 +1,5 @@
 
-__author__ = 'Ваши Ф.И.О.'
+__author__ = 'Гузенко Антон Николаевич'
 
 # Задача-1: Дано произвольное целое число, вывести самую большую цифру этого числа.
 # Например, дается x = 58375.
@@ -10,6 +10,15 @@ __author__ = 'Ваши Ф.И.О.'
 # * постарайтесь решить задачу с применением арифметики и цикла while;
 # * при желании и понимании решите задачу с применением цикла for.
 
+digit = input("Введите целое число: ")
+digit_lenght = len(digit)
+digit_index = 0
+digit_max = digit[0]
+while  digit_index < digit_lenght:
+    if int(digit[digit_index]) > int(digit_max):
+        digit_max = digit[digit_index]
+    digit_index += 1
+print(digit_max)
 
 # Задача-2: Исходные значения двух переменных запросить у пользователя.
 # Поменять значения переменных местами. Вывести новые значения на экран.
@@ -18,6 +27,11 @@ __author__ = 'Ваши Ф.И.О.'
 # * постарайтесь сделать решение через действия над числами;
 # * при желании и понимании воспользуйтесь синтаксисом кортежей Python.
 
+first_var = input("Введите значение первой переменной: ")
+second_var = input("Введите значение второй переменной: ")
+first_var,second_var = second_var,first_var
+print ("first_var = ",first_var)
+print ("second_var = ",second_var)
 
 # Задача-3: Напишите программу, вычисляющую корни квадратного уравнения вида
 # ax² + bx + c = 0.
@@ -25,3 +39,22 @@ __author__ = 'Ваши Ф.И.О.'
 # Для вычисления квадратного корня воспользуйтесь функцией sqrt() модуля math:
 # import math
 # math.sqrt(4) - вычисляет корень числа 4
+
+print("Введите коэффициенты для квадратного уравнения (ax^2 + bx + c = 0):")
+a = float(input("a = "))
+b = float(input("b = "))
+c = float(input("c = "))
+ 
+discr = b**2 - 4 * a * c
+print("Дискриминант D = %.2f" % discr)
+if discr > 0:
+	import math
+	x1 = (-b + math.sqrt(discr)) / (2 * a)
+	x2 = (-b - math.sqrt(discr)) / (2 * a)
+	print("x1 = %.2f \nx2 = %.2f" % (x1, x2))
+elif discr == 0:
+	x = -b / (2 * a)
+	print("x = %.2f" % x)
+else:
+	print("Корней нет")
+
