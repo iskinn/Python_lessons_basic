@@ -13,3 +13,36 @@
 # Для решения данной задачи используйте алгоритмы из задания easy,
 # оформленные в виде соответствующих функций,
 # и импортированные в данный файл из easy.py
+
+import os, sys
+from hw05_easy import rm_dir, create_dir, list_dir
+
+# Сменить текущий каталог
+def change_dir(dir_name):
+    dir_path = os.path.join(os.getcwd(), '{0}'.format(dir_name))
+    try:
+        os.chdir(dir_path)
+        print("\nВы успешно сменили текущую директорию: ", dir_path)
+    except FileNotFoundError:
+        print('\nТакая директория не существует')
+
+def chose_menu():
+    menu = ["\nВыберите действие:\n","1. Перейти в папку", "2. Просмотреть папки для перехода", "3. Создать папку", "4. Удалить папку", "5. Выход"]
+    for i in menu: print(i)
+    unit = input("\nВведите номер операции: ")
+    if unit == '1':
+        dir_name = input("\nВведите имя папки: ")
+        change_dir(dir_name)
+    if unit == '2':
+        list_dir()
+    if unit == '3':
+        dir_name = input("\nВведите имя папки: ")
+        create_dir(dir_name)
+    if unit == '4':
+        dir_name = input("\nВведите имя папки: ")
+        rm_dir(dir_name)
+    if unit == '5':
+        exit()
+
+while True:
+    chose_menu()
