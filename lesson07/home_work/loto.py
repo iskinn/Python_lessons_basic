@@ -1,59 +1,95 @@
 #!/usr/bin/python3
 
-"""
-== Лото ==
+import random, sys
 
-Правила игры в лото.
+class Cards:
+    def __init__(self, numbers):
+        self.numbers = numbers
+    
+    def print_card(self, text):
+        print(text)
+        print(' '.join(self.numbers[0:9]))
+        print(' '.join(self.numbers[9:18]))
+        print(' '.join(self.numbers[18:27]))
+        print("---------------------------")
 
-Игра ведется с помощью специальных карточек, на которых отмечены числа, 
-и фишек (бочонков) с цифрами.
+    def generate_cards(self):
+        a = []
+        for random_number in range(1,91): a.append((str(random_number)).rjust(2))
+        random.shuffle(a)
+        x = a[0:5]
+        y = a[50:55]
+        z = a[85:90]
+        for random_number in range(1,5): x.append('  ')
+        for random_number in range(1,5): y.append('  ')
+        for random_number in range(1,5): z.append('  ')
+        random.shuffle(x)
+        random.shuffle(y)
+        random.shuffle(z)
+        return x + y + z
 
-Количество бочонков — 90 штук (с цифрами от 1 до 90).
+    def count(self,numbers,i):
+        return self.numbers.count(i)
 
-Каждая карточка содержит 3 строки по 9 клеток. В каждой строке по 5 случайных цифр, 
-расположенных по возрастанию. Все цифры в карточке уникальны. Пример карточки:
+class Bochonki:
+    def __init__(self, bochonok_list):
+        self.bochonok_list = bochonok_list
 
---------------------------
-    9 43 62          74 90
- 2    27    75 78    82
-   41 56 63     76      86 
---------------------------
+    # Бочонки генерим сразу все в случайном порядке
+    def bochonki_generate(self):
+        a = []
+        for number in range(1,91): a.append((str(number)).rjust(2))
+        random.shuffle(a)
+        return a
 
-В игре 2 игрока: пользователь и компьютер. Каждому в начале выдается 
-случайная карточка. 
+def game(card_m, card_c):
+    # переменные для подсчета удачных ходов, если = 25, то победа
+    card_m_success_count = 0
+    card_c_success_count = 0
 
-Каждый ход выбирается один случайный бочонок и выводится на экран.
-Также выводятся карточка игрока и карточка компьютера.
+    for i in bochonki.bochonok_list:
+        # выводим очередной бочонок
+        print("\nВыпало число:", i)
+        card_m.print_card("\n---- Это ваша карточка ----")
+        card_c.print_card("\n- Это карточка компьютера -")
+        otvet = input("Закрыть число? y/[n]:")
 
-Пользователю предлагается зачеркнуть цифру на карточке или продолжить.
-Если игрок выбрал "зачеркнуть":
-	Если цифра есть на карточке - она зачеркивается и игра продолжается.
-	Если цифры на карточке нет - игрок проигрывает и игра завершается.
-Если игрок выбрал "продолжить":
-	Если цифра есть на карточке - игрок проигрывает и игра завершается.
-	Если цифры на карточке нет - игра продолжается.
-	
-Побеждает тот, кто первый закроет все числа на своей карточке.
+        # Закрываем свое число
+        if otvet == 'y':
+            if card_m.numbers.count(i) == 1:
+                for n,m in enumerate(card_m.numbers):
+                    if m == i:
+                        card_m.numbers[n] = '--'
+                        card_m_success_count += 1
+                        if card_m_success_count == 25:
+                            print("Вы выиграли!")
+                            sys.exit()
+            else:
+                print("Вы ошиблись! Игра окончена.")
+                sys.exit()
+        if otvet != 'y' and card_m.numbers.count(i) == 1:
+            print("Вы ошиблись! Игра окончена.")
+            sys.exit()
 
-Пример одного хода:
+        # Закрываем число компьютера
+        if card_c.numbers.count(i) == 1:
+            for n,m in enumerate(card_c.numbers):
+                  if m == i:
+                      card_c.numbers[n] = '--'
+                      card_c_success_count += 1
+                      if card_c_success_count == 25:
+                            print("Выиграли компьютер!")
+                            sys.exit()
 
-Новый бочонок: 70 (осталось 76)
------- Ваша карточка -----
- 6  7          49    57 58
-   14 26     -    78    85
-23 33    38    48    71   
---------------------------
--- Карточка компьютера ---
- 7 87     - 14    11      
-      16 49    55 88    77    
-   15 20     -       76  -
---------------------------
-Зачеркнуть цифру? (y/n)
+# инициализируем пустые экземпляры классов
+my_card = Cards([])
+comp_card = Cards([])
+bochonki = Bochonki([])
 
-Подсказка: каждый следующий случайный бочонок из мешка удобно получать 
-с помощью функции-генератора.
+# заполняем экземпляры классов через вызовы методов
+my_card.numbers = my_card.generate_cards()
+comp_card.numbers = comp_card.generate_cards()
+bochonki.bochonok_list = bochonki.bochonki_generate()
 
-Подсказка: для работы с псевдослучайными числами удобно использовать 
-модуль random: http://docs.python.org/3/library/random.html
-
-"""
+# вызываем функцию игры
+game(my_card, comp_card)
